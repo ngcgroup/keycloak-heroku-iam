@@ -7,13 +7,17 @@ services:
       environment:
         DATABASE_URL: ${DATABASE_URL}
         PORT: 8080
+        KEYCLOAK_USER: ${KEYCLOAK_USER}
+        KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+        PROXY_ADDRESS_FORWARDING: ${PROXY_ADDRESS_FORWARDING}
 
       healthcheck:
         test: ["CMD", "nc", "-z","localhost", "8080"]
-      depends_on: 
-        kc-db:
-          condition: service_healthy  
+      #depends_on: 
+      #  kc-db:
+      #    condition: service_healthy  
         # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
         #JDBC_PARAMS: "ssl=true"
       ports:
         - 8080:8080
+        - 8443:8443      
