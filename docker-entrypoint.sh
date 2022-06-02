@@ -193,5 +193,5 @@ fi
 # Start Keycloak #
 ##################
 
-exec /opt/jboss/keycloak/bin/standalone.sh $SYS_PROPS KC_ARGS -Djboss.http.port=$PORT 
+exec /opt/jboss/keycloak/bin/standalone.sh $SYS_PROPS $KC_ARGS -Djboss.http.port=$PORT 
 exit $?

@@ -7,5 +7,5 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 USER 1000
 
 ENTRYPOINT [ "/opt/jboss/tools/docker-entrypoint.sh" ]
-#CMD ["-b", "0.0.0.0"]
+CMD ["-b", "0.0.0.0"]
 

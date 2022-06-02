@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  postgre_shared:
+  postgre_api:
+
+services:
+  kc-db:
+    image: 'postgres:12.9'  
+    ports:
+      - 7432:5432 
+    healthcheck:
+      test: pg_isready -U postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - 'postgre_api:/var/lib/postgresql/data'
