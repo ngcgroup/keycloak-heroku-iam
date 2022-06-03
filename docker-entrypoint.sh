@@ -18,11 +18,6 @@ if [ "$DATABASE_URL" != "" ]; then
 
 fi
 
-KC_ARGS = "-b 0.0.0.0"
-if [ "$@" != "" ]; then
-    KC_ARGS="$@"
-fi
-
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
