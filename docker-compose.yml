@@ -10,6 +10,8 @@ services:
         KEYCLOAK_USER: ${KEYCLOAK_USER}
         KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
         PROXY_ADDRESS_FORWARDING: ${PROXY_ADDRESS_FORWARDING}
+        KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+        
 
       healthcheck:
         test: ["CMD", "nc", "-z","localhost", "8080"]
