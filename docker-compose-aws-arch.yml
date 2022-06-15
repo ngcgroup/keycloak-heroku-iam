@@ -1,6 +1,6 @@
 version: '3'
 x-aws-vpc: "vpc-37dd6b52"
-#x-aws-loadbalancer: "LoadBalancerName"
+x-aws-loadbalancer: "ga-alb"
 services:
   keycloak:
     image: 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:latest
@@ -11,5 +11,5 @@ services:
       PROXY_ADDRESS_FORWARDING: ${PROXY_ADDRESS_FORWARDING}
       PORT: 8080
     ports:
-        - target:8080
-          x-aws-protocol: http
+      - 8080:8080
+      - 8443:8443
