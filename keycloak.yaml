@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: iam
+  labels:
+    cert-manager-tls: kubed
 ---
 apiVersion: v1
 kind: Service
@@ -57,3 +59,31 @@ spec:
           resources: {}
       restartPolicy: Always
 status: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: iam
+  name: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: "nginx"    
+spec:
+  tls:
+  - secretName: tls-cert
+    hosts:
+    - iam.bhn.technology
+    - iam1.bhn.technology  
+  rules:
+    - host: iam.bhn.technology
+      http:
+        paths:        
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: keycloak
+              port:
+                number: 8080
