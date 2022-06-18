@@ -45,3 +45,6 @@ curl -X POST \
 
 
 ```
+
+## Configure Api studio with keycloak as IDP
+https://www.chakray.com/how-use-keycloak-as-wso2-api-manager-identity-provider/#integration
