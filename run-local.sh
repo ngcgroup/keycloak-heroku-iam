@@ -13,4 +13,4 @@ for line in $(aws ssm get-parameters-by-path --path $app --query "Parameters[*].
 done; 
 IFS=$TEMPIFS;
 
-docker --debug compose -f docker-compose-aws-arch.yml --project-name bhn-iam up -d
+docker-compose -f docker-compose-aws-arch.yml up
