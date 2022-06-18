@@ -75,7 +75,6 @@ spec:
   - secretName: tls-cert
     hosts:
     - iam.bhn.technology
-    - iam1.bhn.technology  
   rules:
     - host: iam.bhn.technology
       http:
