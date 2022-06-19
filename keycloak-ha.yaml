@@ -72,6 +72,8 @@ spec:
             #   value: "postgres"
             # - name: DB_PASSWORD
             #   value: "thepasswordgoeshere"
+            - name: CACHE_OWNERS
+              value: "2"
             - name: KEYCLOAK_STATISTICS
               value: "all"
             - name: KUBERNETES_LABELS
