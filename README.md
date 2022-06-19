@@ -11,7 +11,17 @@ $ ./run-eks -p {aws_profile_name}
 
 2. shutdown cleanup
 ```bash
-$ kubectl delete -k .
+$ ./stop-eks.sh
+namespace "iam" deleted
+serviceaccount "keycloak" deleted
+role.rbac.authorization.k8s.io "keycloak-viewer" deleted
+rolebinding.rbac.authorization.k8s.io "keycloak-view" deleted
+configmap "cache-owners-k7ctg9ht26" deleted
+configmap "env-bindings-cm-92mt28dh2m" deleted
+service "keycloak" deleted
+service "keycloak-discovery" deleted
+statefulset.apps "keycloak" deleted
+ingress.networking.k8s.io "ingress-nginx" deleted
 ```
 
 3. check 
@@ -62,4 +72,5 @@ keycloak-1   0/1     Running   0          50s
 10. https://www.tothenew.com/blog/keycloak-high-availability-setup-in-kubernetes/
 11. https://www.keycloak.org/docs/latest/server_installation/#_clustering
 12. http://docs.wildfly.org/23/High_Availability_Guide.html#JGroups_Subsystem
+13. tput init
 ```
