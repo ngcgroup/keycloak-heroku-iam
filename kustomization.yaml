@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: iam
+#namespace: 
+#  overwrite: true
+#  name: iam
+commonLabels:
+  com.bhn.service: keycloak
+configMapGenerator:
+  - name: cache-owners
+    files:
+      - cache-owners.cli
+  - name: env-bindings-cm
+    envs:
+      - env-file
+      
+resources:
+#- global-labels.yaml
+- rbac.yaml
+- keycloak-ha.yaml
+#- sm.yaml
