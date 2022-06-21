@@ -58,6 +58,25 @@ keycloak-0   1/1     Running   0          21m
 keycloak-1   0/1     Running   0          50s
 ```
 
+
+5. keystore 
+```bash
+$ keytool -genkey -alias server -keyalg RSA -keysize 2048 -validity 3650 -keystore application.keystore -dname "CN=localhost,OU=Technology,O=BHN,L=Pleasanton,S=CA,C=US" -storepass password -keypass password -noprompt -ext SAN=dns:iam.bhn.technology
+
+#### or on the keycloak instance ### 
+$ $(cat <<EOF | kubectl exec  -n iam -it keycloak-0 -- bash
+cd /opt/jboss/keycloak/standalone/configuration/;
+keytool -export -alias server -file keycloak.crt -keystore application.keystore -storepass password -noprompt
+EOF
+)
+$ kubectl -n iam cp keycloak-0:/opt/jboss/keycloak/standalone/configuration/keycloak.crt ./keycloak.crt
+$ kubectl -n iam cp keycloak-0:/opt/jboss/keycloak/standalone/configuration/application.keystore ./application.keystore
+
+##### https://wyssmann.com/blog/2021/09/how-to-add-encoded-key-and-truststore-to-k8s-secret/ ##
+
+$ kubectl create secret generic keycloak-keystore -n iam --from-file application.keystore=application.keystore
+```
+
 ## Reference Links ##
 ```
 1. https://www.keycloak.org/2019/05/keycloak-cluster-setup.html
@@ -73,4 +92,5 @@ keycloak-1   0/1     Running   0          50s
 11. https://www.keycloak.org/docs/latest/server_installation/#_clustering
 12. http://docs.wildfly.org/23/High_Availability_Guide.html#JGroups_Subsystem
 13. tput init
+14. https://wyssmann.com/blog/2021/09/how-to-add-encoded-key-and-truststore-to-k8s-secret/
 ```

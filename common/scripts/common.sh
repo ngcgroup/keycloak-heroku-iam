@@ -3,7 +3,7 @@ function parse_args() {
   while [[ $# -gt 0 ]]; do
     case $1 in
       -p|--profile)
-          profile=$2
+          profile="--profile $2"
           shift # past argument
           shift # past value
           ;;  
@@ -24,9 +24,10 @@ function parse_args() {
   done
 }
 
-if [ "$profile" == "" ]; then 
-	profile="arch"
-fi
+## set AWS_PROFILE to whatever you want or use --profile, no default
+#if [ "$profile" == "" ]; then 
+# profile="arch"
+#fi
 
 
 
@@ -35,7 +36,7 @@ function source_env_from_aws() {
   IFS=$'\n'; 
   rm -rf env-file
   echo "## title ##" >> env-file
-  for line in $(aws ssm get-parameters-by-path --profile ${profile} --path $app --query "Parameters[*].{Name:Name,Value:Value}" | jq -r '.[] |[.Name, .Value] | @tsv' | sed "s/${app2}//g" | sed "s/^\///g" |awk -F '\t' '{print $1"="$2}'); do
+  for line in $(aws ssm get-parameters-by-path ${profile} --path $app --query "Parameters[*].{Name:Name,Value:Value}" | jq -r '.[] |[.Name, .Value] | @tsv' | sed "s/${app2}//g" | sed "s/^\///g" |awk -F '\t' '{print $1"="$2}'); do
     if [[ "$line" =~ ^([a-zA-Z0-9_]*)=(.*)$ ]]; then 
       export ${BASH_REMATCH[1]}=${BASH_REMATCH[2]}; 
       echo ${BASH_REMATCH[1]}=${BASH_REMATCH[2]} >> env-file
