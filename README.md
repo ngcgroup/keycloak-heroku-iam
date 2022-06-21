@@ -60,21 +60,10 @@ keycloak-1   0/1     Running   0          50s
 
 
 5. keystore 
-```bash
-$ keytool -genkey -alias server -keyalg RSA -keysize 2048 -validity 3650 -keystore application.keystore -dname "CN=localhost,OU=Technology,O=BHN,L=Pleasanton,S=CA,C=US" -storepass password -keypass password -noprompt -ext SAN=dns:iam.bhn.technology
-
-#### or on the keycloak instance ### 
-$ $(cat <<EOF | kubectl exec  -n iam -it keycloak-0 -- bash
-cd /opt/jboss/keycloak/standalone/configuration/;
-keytool -export -alias server -file keycloak.crt -keystore application.keystore -storepass password -noprompt
-EOF
-)
-$ kubectl -n iam cp keycloak-0:/opt/jboss/keycloak/standalone/configuration/keycloak.crt ./keycloak.crt
-$ kubectl -n iam cp keycloak-0:/opt/jboss/keycloak/standalone/configuration/application.keystore ./application.keystore
-
-##### https://wyssmann.com/blog/2021/09/how-to-add-encoded-key-and-truststore-to-k8s-secret/ ##
-
-$ kubectl create secret generic keycloak-keystore -n iam --from-file application.keystore=application.keystore
+```bash  ## one time event ##
+## rm -rf application.keystore
+$ ./generate-keystore.sh
+## it will automatically delete the pod
 ```
 
 ## Reference Links ##
