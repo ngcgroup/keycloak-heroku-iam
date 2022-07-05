@@ -75,7 +75,7 @@ spec:
             #   value: "postgres"
             # - name: DB_USER
             #   value: "postgres"
-            # - name: DB_PASSWORD
+            # - name: DB_PASSWORD 
             #   value: "thepasswordgoeshere"
             - name: CACHE_OWNERS
               value: "2"
@@ -105,6 +105,8 @@ spec:
                 -Djboss.node.name=$(POD_NAME)
                 -Djboss.tx.node.id=$(POD_NAME)
                 -Djboss.site.name=$(KUBERNETES_NAMESPACE)
+                -Dkeycloak.profile.feature.upload_scripts=enabled
+                -Dkeycloak.profile.feature.scripts=enabled
           envFrom:
             - configMapRef:
                 name: env-bindings-cm
