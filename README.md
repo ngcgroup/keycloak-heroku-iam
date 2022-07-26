@@ -86,3 +86,4 @@ $ ./generate-keystore.sh
 
 ## Themes
 https://keycloakthemes.com/blog/how-to-turn-off-the-keycloak-theme-cache
+cd themes/bhn-iam && cp * keycloak-0:/opt/jboss/keycloak/themes/bhn-iam/ -n iam

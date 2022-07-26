@@ -110,6 +110,7 @@ spec:
                 -Djboss.site.name=$(KUBERNETES_NAMESPACE)
                 -Dkeycloak.profile.feature.upload_scripts=enabled
                 -Dkeycloak.profile.feature.scripts=enabled
+                -Dkeycloak.profile.feature.declarative_user_profile=enabled
           envFrom:
             - configMapRef:
                 name: env-bindings-cm
