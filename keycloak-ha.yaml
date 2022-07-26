@@ -144,6 +144,9 @@ spec:
         - name: cache-owners
           configMap:
             name: cache-owners
+        - name: theme-cache
+          configMap:
+            name: theme-cache
         - name: application-keystore
           secret:
             secretName: keycloak-keystore
