@@ -83,3 +83,6 @@ $ ./generate-keystore.sh
 13. tput init
 14. https://wyssmann.com/blog/2021/09/how-to-add-encoded-key-and-truststore-to-k8s-secret/
 ```
+
+## Themes
+https://keycloakthemes.com/blog/how-to-turn-off-the-keycloak-theme-cache
