@@ -1,39 +1,31 @@
 #!/bin/bash
 set -e
 set -x
+#!/bin/bash
+set -e
+set -x
 
-POSITIONAL_ARGS=()
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    -p|--push)
-        docker_push="true"
-        shift # past argument
-        #shift # past value
-        ;; 
-	-l|--login)
-        docker_login="true"
-        shift # past argument
-        #shift # past value
-        ;;                       
-    -*|--*)
-      echo "Unknown option $1"
-      exit 1
-      ;;
-    *)
-      POSITIONAL_ARGS+=("$1") # save positional arg
-      shift # past argument
-      ;;
-  esac
+for i in $SCRIPT_DIR/common/scripts/*;
+  do source $i
 done
 
-docker build -t keycloak .
-docker tag keycloak:latest 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:latest
+parse_args $@
+source_env_from_aws
 
-if [ "$docker_login" == "true" ];then
-	aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 982306614752.dkr.ecr.us-west-2.amazonaws.com
-fi
 
-if [ "$docker_push" == "true" ];then
-	docker push 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:latest
-fi
+docker build -t keycloak . -f Dockerfile-${kc_version}
+registry=982306614752.dkr.ecr.us-west-2.amazonaws.com
+image_tag=$registry/keycloak:${kc_version}
+docker tag keycloak:latest $image_tag
+
+docker_login $registry
+docker_push $image_tag
+
+#if [ "$docker_login" == "true" ];then
+#	aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 982306614752.dkr.ecr.us-west-2.amazonaws.com
+#fi
+#if [ "$docker_push" == "true" ];then
+#	docker push 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:latest
+#fi

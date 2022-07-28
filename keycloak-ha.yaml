@@ -55,7 +55,7 @@ spec:
       restartPolicy: Always
       serviceAccountName: keycloak
       containers:
-        - image: 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:latest
+        - image: 982306614752.dkr.ecr.us-west-2.amazonaws.com/keycloak:16.0.0
           imagePullPolicy: Always
           name: keycloak
           volumeMounts:

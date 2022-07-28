@@ -1,5 +1,6 @@
 POSITIONAL_ARGS=()
 function parse_args() {
+  kc_version=16.0.0
   while [[ $# -gt 0 ]]; do
     case $1 in
       -p|--profile)
@@ -11,7 +12,22 @@ function parse_args() {
           dry_run=" --dry-run=client -o yaml"
           shift # past argument
           #shift # past value
-          ;;         
+          ;;
+      -u|--push)
+        docker_push="true"
+        shift # past argument
+        #shift # past value
+        ;; 
+	    -l|--login)
+        docker_login="true"
+        shift # past argument
+        #shift # past value
+        ;;
+	    --kc-version)
+        kc_version=$2
+        shift # past argument
+        shift # past value
+        ;;            
       -*|--*)
         echo "Unknown option $1"
         exit 1
@@ -44,4 +60,17 @@ function source_env_from_aws() {
     fi; 
   done; 
   IFS=$TEMPIFS;  
+}
+
+function docker_login() {
+    if [ "$docker_login" == "true" ]; then
+      echo "logging in" 
+      aws ecr get-login-password $profile | docker login --username AWS --password-stdin $1
+    fi
+}
+
+function docker_push() {
+    if [ "$docker_push" == "true" ]; then
+      docker push $1
+    fi
 }
