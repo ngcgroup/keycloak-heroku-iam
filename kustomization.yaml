@@ -4,8 +4,8 @@ namespace: iam
 #namespace: 
 #  overwrite: true
 #  name: iam
-commonLabels:
-  com.bhn.service: keycloak
+#commonLabels:
+#  com.bhn.service: keycloak
 configMapGenerator:
   - name: cache-owners
     files:
@@ -20,5 +20,6 @@ configMapGenerator:
 resources:
 #- global-labels.yaml
 - rbac.yaml
+- readme-app-bridge.yaml
 - keycloak-ha.yaml
 #- sm.yaml

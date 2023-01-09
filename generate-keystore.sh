@@ -3,7 +3,8 @@ keytool -genkey -alias server -keyalg RSA -keysize 2048 -validity 3650 -keystore
 keytool -export -alias server -file keycloak.crt -keystore application.keystore -storepass password -noprompt
 kubectl create secret generic keycloak-keystore -n iam --from-file application.keystore=application.keystore --from-file=keycloak.crt=keycloak.crt
 kubectl delete pod/keycloak-0 -n iam
-kubectl label secret keycloak-keystore -n iam app=kubed
+#kubectl label secret keycloak-keystore -n iam cert-manager-tls=kubed
+kubectl annotate secret keycloak-keystore -n iam kubed.appscode.com/sync="cert-manager-tls=kubed"
 
 #### junk ### 
 # $ $(cat <<EOF | kubectl exec  -n iam -it keycloak-0 -- bash

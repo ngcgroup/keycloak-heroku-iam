@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: readme-bridge-service
+  namespace: iam
+spec:
+  ports:
+    - name: "default"
+      port: 8000
+      targetPort: 8000
+  selector:
+    com.bhn.service: readme-bridge-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readme-bridge-deploy
+  namespace: iam
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      com.bhn.service: readme-bridge-pod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        com.bhn.service: readme-bridge-pod
+    spec:
+      containers:
+        - env:
+            - name: PLACEHOLDER
+              value: "true"
+          image: 982306614752.dkr.ecr.us-west-2.amazonaws.com/readme-bridge:latest
+          name: readme-bridge-pod
+          ports:
+            - containerPort: 8000
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: env-bindings-cm
+      restartPolicy: Always

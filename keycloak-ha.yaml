@@ -50,7 +50,9 @@ spec:
    
   template:
     metadata:
-        name: keycloak-template
+      name: keycloak-template
+      labels:
+        com.bhn.service: keycloak
     spec:
       restartPolicy: Always
       serviceAccountName: keycloak
@@ -62,9 +64,6 @@ spec:
             - name: cache-owners
               subPath: cache-owners.cli
               mountPath: /opt/jboss/startup-scripts/cache-owners.cli
-            - name: theme-cache
-              subPath: disable-theme-cache.cli
-              mountPath: /opt/jboss/startup-scripts/disable-theme-cache.cli
             - name: application-keystore
               readOnly: true
               mountPath: /opt/jboss/keycloak/standalone/configuration/application.keystore
@@ -80,6 +79,10 @@ spec:
             #   value: "postgres"
             # - name: DB_PASSWORD 
             #   value: "thepasswordgoeshere"
+            #- name: KEYCLOAK_LOGLEVEL
+            #  value: "DEBUG"
+            #- name: ROOT_LOGLEVEL
+            #  value: "DEBUG"
             - name: CACHE_OWNERS
               value: "2"
             - name: KEYCLOAK_STATISTICS
@@ -110,8 +113,6 @@ spec:
                 -Djboss.site.name=$(KUBERNETES_NAMESPACE)
                 -Dkeycloak.profile.feature.upload_scripts=enabled
                 -Dkeycloak.profile.feature.scripts=enabled
-                -Dkeycloak.profile.feature.declarative_user_profile=enabled
-                -Dkeycloak.profile.feature.preview=enabled
           envFrom:
             - configMapRef:
                 name: env-bindings-cm
@@ -124,12 +125,12 @@ spec:
             #   cpu: 500m
           livenessProbe:
             httpGet:
-              path: /
+              path: auth/
               port: http
             initialDelaySeconds: 140
           readinessProbe:
             httpGet:
-              path: /
+              path: auth/realms/master
               port: http
             initialDelaySeconds: 140
           ports:
@@ -145,16 +146,13 @@ spec:
         - name: cache-owners
           configMap:
             name: cache-owners
-        - name: theme-cache
-          configMap:
-            name: theme-cache
         - name: application-keystore
           secret:
             secretName: keycloak-keystore
             items:
               - key: application.keystore
                 path: application.keystore
-            defaultMode: 420
+            defaultMode: 420            
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -165,7 +163,7 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:
   - secretName: tls-cert
@@ -174,7 +172,7 @@ spec:
   rules:
     - host: iam.bhn.technology
       http:
-        paths:        
+        paths:
         - path: /
           pathType: Prefix
           backend:
@@ -182,3 +180,10 @@ spec:
               name: keycloak
               port:
                 number: 8443
+        - path: /readme-webhook
+          pathType: Exact
+          backend:
+            service:
+              name: readme-bridge-service
+              port:
+                number: 8000
