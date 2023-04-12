@@ -32,6 +32,8 @@ spec:
         - env:
             - name: PLACEHOLDER
               value: "true"
+            - name: FLIGHTDECK_API_KEY
+              value: "${ENV_FLIGHTDECK_API_KEY}"
           image: 982306614752.dkr.ecr.us-west-2.amazonaws.com/readme-bridge:latest
           name: readme-bridge-pod
           ports:
