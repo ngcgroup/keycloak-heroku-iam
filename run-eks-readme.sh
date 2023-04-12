@@ -13,5 +13,6 @@ parse_args $@
 source_env_from_aws
 #envsubst < keycloak.yaml | kubectl apply -f -
 #kubectl apply  -k . --dry-run=client -o yaml
-kubectl create configmap env-bindings-cm --from-file=env-file
+kubectl delete configmap env-bindings-cm -n iam
+kubectl create configmap env-bindings-cm --from-file=env-file -n iam
 kubectl apply -f readme-app-bridge.yaml
